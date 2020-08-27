@@ -25,7 +25,7 @@ function App() {
         {images.map(item => {
           return (
             <div>
-              <h3>{item.title}</h3>
+              <h3>Title: {item.title}</h3>
               <img src={item.url} class="image-thumb" alt={item.title}></img>
             </div>
             )
