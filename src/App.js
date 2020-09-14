@@ -11,17 +11,9 @@ var images = [{
   url:'https://live.staticflickr.com/65535/40779019203_aebf70ad25_h.jpg'
 } ]
 
-function App() {
-  return (
-    <div className="App">
-      <div class="header">
-        <h1>Hello World!!! This is my photo album!</h1>
-      </div>
-      <div class="searchPanel">
-        <label htmlFor="search">Search: </label>
-        <input id="search" type="text"></input>
-      </div>
-      <div class="image-thumbnails">
+function Images(){
+return (
+  <div class="image-thumbnails">
         {images.map(item => {
           return (
             <div>
@@ -32,6 +24,20 @@ function App() {
         }
         )}
       </div>
+);
+}
+
+function App() {
+  return (
+    <div className="App">
+      <div class="header">
+        <h1>Hello World!!! This is my photo album!</h1>
+      </div>
+      <div class="searchPanel">
+        <label htmlFor="search">Search: </label>
+        <input id="search" type="text"></input>
+      </div>
+      <Images/>
     </div>
   );
 }
