@@ -2,19 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-var images = [{
-  title: 'frontyard-rose-rainsoaked',
-  url:'https://live.staticflickr.com/65535/49851056786_eac8b1dc36_k.jpg'
-},
-{
-  title: 'frontyard-rose-halfbloom',
-  url:'https://live.staticflickr.com/65535/40779019203_aebf70ad25_h.jpg'
-} ]
 
-function Images(){
+
+const Images = props => {
 return (
   <div class="image-thumbnails">
-        {images.map(item => {
+        {props.list.map(item => {
           return (
             <div>
               <h3>Title: {item.title}</h3>
@@ -28,6 +21,22 @@ return (
 }
 
 function App() {
+
+  var images = [{
+    title: 'frontyard-rose-rainsoaked',
+    url:'https://live.staticflickr.com/65535/49851056786_eac8b1dc36_k.jpg'
+  },
+  {
+    title: 'frontyard-rose-halfbloom',
+    url:'https://live.staticflickr.com/65535/40779019203_aebf70ad25_h.jpg'
+  } ]
+
+  const [searchTerm, setSearchTerm] = React.useState('Hello');
+
+  const handleChange = event => {
+    console.log(setSearchTerm(event.target.value));
+  }
+  
   return (
     <div className="App">
       <div class="header">
@@ -35,9 +44,13 @@ function App() {
       </div>
       <div class="searchPanel">
         <label htmlFor="search">Search: </label>
-        <input id="search" type="text"></input>
+        <input id="search" onChange={handleChange} type="text" value={searchTerm}></input>
+
+        <p>
+         Search for <strong>{searchTerm}</strong>
+        </p>
       </div>
-      <Images/>
+      <Images list={images}/>
     </div>
   );
 }
