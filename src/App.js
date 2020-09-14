@@ -20,7 +20,18 @@ return (
 );
 }
 
+const Search = props => {
+return (
+  <div class="searchPanel">
+  <label htmlFor="search">Search: </label>
+  <input id="search" onChange={props.onSearch} type="text" ></input>
+</div>
+);
+
+}
+
 function App() {
+
 
   var images = [{
     title: 'frontyard-rose-rainsoaked',
@@ -31,10 +42,16 @@ function App() {
     url:'https://live.staticflickr.com/65535/40779019203_aebf70ad25_h.jpg'
   } ]
 
-  const [searchTerm, setSearchTerm] = React.useState('Hello');
+  const [searchTerm, setSearchTerm] = React.useState('');
 
-  const handleChange = event => {
-    console.log(setSearchTerm(event.target.value));
+  const searchedImages = images.filter(function(image){
+    return image.title.toLowerCase()
+      .includes(searchTerm.toLowerCase());
+  })
+
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
   }
   
   return (
@@ -42,15 +59,8 @@ function App() {
       <div class="header">
         <h1>Hello World!!! This is my photo album!</h1>
       </div>
-      <div class="searchPanel">
-        <label htmlFor="search">Search: </label>
-        <input id="search" onChange={handleChange} type="text" value={searchTerm}></input>
-
-        <p>
-         Search for <strong>{searchTerm}</strong>
-        </p>
-      </div>
-      <Images list={images}/>
+      <Search onSearch={handleSearch}/>
+      <Images list={searchedImages}/>
     </div>
   );
 }
