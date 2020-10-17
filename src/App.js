@@ -1,48 +1,60 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 
 
-const Images = props => {
-return (
-  <div class="image-thumbnails">
-        {props.list.map(item => {
-          return (
-            <div>
-              <h3>Title: {item.title}</h3>
-              <img src={item.url} class="image-thumb" alt={item.title}></img>
-            </div>
-            )
-        }
-        )}
-      </div>
-);
+const Images = ({list}) => list.map(({id,...item}) => <Image key={id} {...item}/>)
+
+const Image = ({id, title, url}) => {
+  return (
+    <div key={id}>
+      <h3>Title: {title}</h3>
+      <img src={url} className="image-thumb" alt={title}></img>
+    </div>
+    )
 }
 
-const Search = props => {
+const InputWithLabel = ({id,  className, value, type = 'text', onInputChange, children}) => {
 return (
-  <div class="searchPanel">
-  <label htmlFor="search">Search: </label>
-  <input id="search" onChange={props.onSearch} type="text" ></input>
+  <div className={className}>
+  <label htmlFor={id}>{children} </label>
+  <input value={value} id={id} onChange={onInputChange} type={type} ></input>
 </div>
 );
 
 }
 
 function App() {
-
-
+ 
   var images = [{
+    id: 1,
     title: 'frontyard-rose-rainsoaked',
     url:'https://live.staticflickr.com/65535/49851056786_eac8b1dc36_k.jpg'
   },
   {
+    id: 2,
     title: 'frontyard-rose-halfbloom',
     url:'https://live.staticflickr.com/65535/40779019203_aebf70ad25_h.jpg'
   } ]
 
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const useSemiPersistentState = (key,initialState) => {
+    const [value,setValue] = React.useState(localStorage.getItem(key) || initialState);
+
+    React.useEffect(()=>{
+      localStorage.setItem(key, value)
+    },[value,key]);
+
+    return [value, setValue];
+  }
+
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search','rose')
+
+  React.useEffect(() => {
+    localStorage.setItem('search', searchTerm);
+  },[searchTerm]);
+
+
+  console.log('searchTerm : ', searchTerm);
 
   const searchedImages = images.filter(function(image){
     return image.title.toLowerCase()
@@ -56,11 +68,20 @@ function App() {
   
   return (
     <div className="App">
-      <div class="header">
+      <div className="header">
         <h1>Hello World!!! This is my photo album!</h1>
       </div>
-      <Search onSearch={handleSearch}/>
-      <Images list={searchedImages}/>
+      <InputWithLabel 
+        id="search"
+        className="searchPanel" 
+        label="Search :" 
+        value={searchTerm} 
+        onInputChange={handleSearch}>
+        <strong> Search: </strong>
+        </InputWithLabel>
+      <div className="image-thumbnails">
+        <Images list={searchedImages}/>
+      </div>
     </div>
   );
 }
