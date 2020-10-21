@@ -14,11 +14,31 @@ const Image = ({id, title, url}) => {
     )
 }
 
-const InputWithLabel = ({id,  className, value, type = 'text', onInputChange, children}) => {
+const InputWithLabel = (
+  { id,
+    className, 
+    value, 
+    type = 'text', 
+    onInputChange, 
+    isFocused,
+    children}) => {
+
+  const inputRef = React.useRef();
+
+  React.useEffect(()=>{
+    if(isFocused && inputRef.current){
+      inputRef.current.focus(); //inputRef.current is the html input element that needs focus
+    }
+  },[isFocused]);
 return (
   <div className={className}>
   <label htmlFor={id}>{children} </label>
-  <input value={value} id={id} onChange={onInputChange} type={type} ></input>
+  <input 
+  ref={inputRef}
+  value={value} 
+  id={id} 
+  onChange={onInputChange} 
+  type={type} ></input>
 </div>
 );
 
@@ -76,6 +96,7 @@ function App() {
         className="searchPanel" 
         label="Search :" 
         value={searchTerm} 
+        isFocused //Same as isFocused={true}
         onInputChange={handleSearch}>
         <strong> Search: </strong>
         </InputWithLabel>
